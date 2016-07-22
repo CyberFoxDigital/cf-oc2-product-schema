@@ -25,36 +25,36 @@
   "@type": "Product",
   "name": "<?php echo $heading_title; ?>",
   "image": "<?php echo preg_replace('/\d+\-\d+\./','.',$thumb); ?>",
-  "description": "<?php echo strlen(strip_tags(trim($description)) > 200 ? substr(strip_tags(trim($description)), 0, 197) . "..." : strip_tags(trim($description); ?>",<?php if(!empty($mpn)){?>
+  "description": "<?php echo strlen(strip_tags(trim($description))) > 200 ? substr(strip_tags(trim($description)), 0, 197) . "..." : strip_tags(trim($description)); ?>",
+<?php if(!empty($mpn)){?>
   "mpn": "<?php echo $mpn; ?>",
   <?php } ?><?php if(!empty($sku)){?>
   "sku": "<?php echo $sku; ?>",
-  <?php } ?><?php if(!empty($manufacturer)){?>
+<?php } ?><?php if(!empty($manufacturer)){?>
   "brand": {
     "@type": "Thing",
     "name": "<?php echo $manufacturer; ?>"
   },
-  <?php } ?><?php if($rating && $reviews) { ?>
+<?php } ?><?php if($rating && $reviews) { ?>
   "aggregateRating": {
     "@type": "AggregateRating",
     "ratingValue": "<?php echo $rating ?>",
     "reviewCount": "<?php echo preg_replace('/.*(\d+).*/s', '$1', $reviews); ?>"
   },
-  <?php } ?>
+<?php } ?>
   "offers": {
     "@type": "Offer",
     "priceCurrency": "<?php echo !empty($this->session->data['currency']) ? $this->session->data['currency'] : 'USD'; ?>",
     "price": "<?php echo $special ? preg_replace('/[^0-9\.]/', '', $special) : preg_replace('/[^0-9\.]/', '', $price); ?>",
-    "priceValidUntil": "2020-11-05",
     "availability": "http://schema.org/<?php echo $availability; ?>",
     "seller": {
       "@type": "Organization",
-      "name": "Executive Objects"
+      "name": "<?php echo $seller; ?>"
     }
   }
 }
 </script>
-<?php } ?>}]]></add>
+<?php } ?>]]></add>
 		</operation>
 	</file>
 </modification>
