@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>0306150316181504210320190308051301</code>
+  <name>OpenCart 2 JSON-LD Google Product Schema</name>
+  <version>1.0</version>
+  <author>Cyber Fox</author>
+  <link>https://cyberfoxdigital.co.uk</link>
+	<file path="catalog/controller/product/product.php">
+		<operation>
+			<search><![CDATA[$data['model'] = $product_info['model'];]]></search>
+			<add position="after"><![CDATA[			$data['mpn'] = $product_info['mpn'];
+			$data['sku'] = $product_info['sku'];
+			$data['seller'] = $this->config->get('config_name');
+			$data['availability'] = $product_info['quantity'] > 0 ? 'InStock' : 'OutOfStock';
+]]></add>
+		</operation>
+	</file>
+	<file path="catalog/view/theme/*/template/product/product.tpl">
+		<operation>
+			<search><![CDATA[<?php echo $footer; ?>]]></search>
+			<add position="before"><![CDATA[<?php if(!empty($thumb) && (!empty($sku) || !empty($mpn))){ ?>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org/",
+  "@type": "Product",
+  "name": "<?php echo $heading_title; ?>",
+  "image": "<?php echo preg_replace('/\d+\-\d+\./','.',$thumb); ?>",
+  "description": "<?php echo strlen(strip_tags(trim($description)) > 200 ? substr(strip_tags(trim($description)), 0, 197) . "..." : strip_tags(trim($description); ?>",<?php if(!empty($mpn)){?>
+  "mpn": "<?php echo $mpn; ?>",
+  <?php } ?><?php if(!empty($sku)){?>
+  "sku": "<?php echo $sku; ?>",
+  <?php } ?><?php if(!empty($manufacturer)){?>
+  "brand": {
+    "@type": "Thing",
+    "name": "<?php echo $manufacturer; ?>"
+  },
+  <?php } ?><?php if($rating && $reviews) { ?>
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "<?php echo $rating ?>",
+    "reviewCount": "<?php echo preg_replace('/.*(\d+).*/s', '$1', $reviews); ?>"
+  },
+  <?php } ?>
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "<?php echo !empty($this->session->data['currency']) ? $this->session->data['currency'] : 'USD'; ?>",
+    "price": "<?php echo $special ? preg_replace('/[^0-9\.]/', '', $special) : preg_replace('/[^0-9\.]/', '', $price); ?>",
+    "priceValidUntil": "2020-11-05",
+    "availability": "http://schema.org/<?php echo $availability; ?>",
+    "seller": {
+      "@type": "Organization",
+      "name": "Executive Objects"
+    }
+  }
+}
+</script>
+<?php } ?>}]]></add>
+		</operation>
+	</file>
+</modification>
