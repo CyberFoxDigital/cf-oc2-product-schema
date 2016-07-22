@@ -24,8 +24,8 @@
   "@context": "http://schema.org/",
   "@type": "Product",
   "name": "<?php echo $heading_title; ?>",
-  "image": "<?php echo preg_replace('/\d+\x\d+\./','.',$thumb); ?>",
-  "description": "<?php echo strlen(strip_tags(trim($description))) > 200 ? substr(strip_tags(trim($description)), 0, 197) . "..." : strip_tags(trim($description)); ?>",
+  "image": "<?php echo preg_replace('/\-\d+x\d+\./','.',str_replace('cache/', '', $thumb)); ?>",
+  "description": "<?php echo strlen(trim(strip_tags($description))) > 200 ? substr(trim(strip_tags($description)), 0, 197) . "..." : trim(strip_tags($description)); ?>",
 <?php if(!empty($mpn)){?>
   "mpn": "<?php echo $mpn; ?>",
   <?php } ?><?php if(!empty($sku)){?>
